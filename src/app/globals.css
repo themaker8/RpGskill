@@ -31,3 +31,27 @@ body {
     text-wrap: balance;
   }
 }
+
+/* styles/globals.css */
+/* styles/globals.css */
+/* styles/globals.css */
+.skill-bar {
+  width: 100%;
+  background-color: #e2e8f0;  /* Light gray background for the bar container */
+  border-radius: 5px;
+  height: 16px;  /* Adjust height if needed */
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 8px;  /* Add some space below the button */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);  /* Add a subtle shadow */
+}
+
+.skill-bar-fill {
+  height: 100%;
+  background-color: #38a169;  /* Green color for the progress bar */
+  transition: width 0.5s ease-in-out;  /* Smooth width transition */
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(0);  /* Ensure the animation is applied correctly */
+}

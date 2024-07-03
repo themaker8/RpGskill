@@ -1,6 +1,7 @@
+// firebase/config.js
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, FieldValue} from 'firebase/firestore';
+import { getFirestore, increment} from 'firebase/firestore';
 
 
 const firebaseConfig = {
@@ -24,4 +25,4 @@ if (!getApps().length) {
 const auth = getAuth(firebaseApp);
 const defaultDb= getFirestore(firebaseApp)
 
-export { auth, defaultDb};
+export { auth, defaultDb };

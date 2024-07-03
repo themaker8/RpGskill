@@ -1,7 +1,9 @@
 'use client';
+
 import { useState, useEffect } from 'react';
-import { collection, addDoc, onSnapshot, updateDoc, doc, FieldValue, increment } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, updateDoc, doc, increment } from 'firebase/firestore';
 import { defaultDb, auth } from '../firebase/config';
+import LogoutButton from '../user/page';// Import the LogoutButton component
 
 export default function Skills() {
   const [skills, setSkills] = useState([]);
@@ -26,7 +28,8 @@ export default function Skills() {
     try {
       setIsLoading(true);
       console.log('Fetching skills for user UID:', userId);  // Log UID for debugging
-      const unsubscribe = onSnapshot(collection(defaultDb, 'skills'), (snapshot) => {
+      const skillsCollectionRef = collection(defaultDb, 'skills');  // Get a reference to the 'skills' collection
+      const unsubscribe = onSnapshot(skillsCollectionRef, (snapshot) => {
         console.log('Snapshot data:', snapshot.docs.map(doc => doc.data()));  // Log the data fetched
         const skillsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setSkills(skillsData.filter(skill => skill.userId === userId));
@@ -51,7 +54,6 @@ export default function Skills() {
       if (newSkill) {
         await addDoc(collection(defaultDb, 'skills'), {
           name: newSkill,  // Skill name
-          level: 'Beginner', // Default level
           userId: user.uid,
           score: 0  // Initialize score to 0
         });
@@ -68,16 +70,11 @@ export default function Skills() {
   };
 
   const increaseScore = async (skillId) => {
-    if (!user) {
-      console.error('User is not authenticated');
-      return;
-    }
-
     try {
       setIsLoading(true);
       const skillRef = doc(defaultDb, 'skills', skillId);
       await updateDoc(skillRef, {
-        score: increment(10)  // Increase the score by 1
+        score: increment(10)
       });
       fetchSkills(user.uid);
     } catch (error) {
@@ -100,10 +97,7 @@ export default function Skills() {
           placeholder="Enter new skill"
           className="border border-gray-300 p-2 rounded-lg mb-2 w-full md:w-3/4 mx-auto"
         />
-        <button 
-          onClick={addSkill}
-          className="bg-black text-white py-2 px-4 m-2 rounded-lg"
-        >
+        <button onClick={addSkill} className="bg-black text-white py-2 px-4 m-2 rounded-lg">
           Add Skill
         </button>
       </div>
@@ -114,7 +108,7 @@ export default function Skills() {
           {skills.map((skill) => (
             <li key={skill.id} className="border p-2 my-2 bg-gray-100 rounded-lg flex flex-col md:flex-row items-center justify-between">
               <div className="flex-1 mb-2 md:mb-0">
-                <span className="font-bold">{skill.name}</span> - <span>{skill.level}</span>
+                <span className="font-bold">{skill.name}</span>
               </div>
               <button 
                 onClick={() => increaseScore(skill.id)}
@@ -146,6 +140,9 @@ export default function Skills() {
             </li>
           ))}
         </ul>
+      </div>
+      <div className="mt-4 text-center">
+        <LogoutButton /> {/* Include the LogoutButton component */}
       </div>
     </div>
   );
