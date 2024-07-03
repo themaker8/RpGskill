@@ -1,14 +1,15 @@
-// firebase/config.js
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore, FieldValue} from 'firebase/firestore';
+
 
 const firebaseConfig = {
-  apiKey: "process.env.NEXT_PUBLIC_API_KEY",
-  authDomain: "process.env.NEXT_PUBLIC_AUTH_DOMAIN",
-  projectId: "process.env.NEXT_PUBLIC_PROJECT_ID",
-  storageBucket: "process.env.NEXT_PUBLIC_STORAGE_BUCKET",
-  messagingSenderId: "process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID",
-  appId: "process.env.NEXT_PUBLIC_APP_ID"
+  apiKey: "AIzaSyApVWLXuf-Wa53LKsmkUTdPyVJwPJydqBI",
+  authDomain: "rpgskill-85931.firebaseapp.com",
+  projectId: "rpgskill-85931",
+  storageBucket: "rpgskill-85931.appspot.com",
+  messagingSenderId: "294487261492",
+  appId: "1:294487261492:web:4080ac4512132c63716561"
 };
 
 let firebaseApp;
@@ -19,6 +20,8 @@ if (!getApps().length) {
   firebaseApp = getApp();
 }
 
-const auth = getAuth(firebaseApp);
 
-export { auth, firebaseApp };
+const auth = getAuth(firebaseApp);
+const defaultDb= getFirestore(firebaseApp)
+
+export { auth, defaultDb};

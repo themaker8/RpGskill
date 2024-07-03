@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:production" : "dotenv next"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "firebase": "^10.12.2",
     "next": "^14.2.4",
     "react": "^18",
