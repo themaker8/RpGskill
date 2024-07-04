@@ -10,7 +10,7 @@ export default function LogoutButton() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      router.push('/'); // Redirect to the homepage after logout
+      router.push('/Home'); // Redirect to the homepage after logout
     } catch (error) {
       console.error('Error logging out:', error);
     }
