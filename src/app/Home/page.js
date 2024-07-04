@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { collection, addDoc, onSnapshot, updateDoc, doc } from 'firebase/firestore';
 import { defaultDb, auth } from '../firebase/config';
-import LogoutButton from '../user/LogoutButton';
+import LogoutButton from '../user/page';
 
 export default function Skills() {
   const [skills, setSkills] = useState([]);
