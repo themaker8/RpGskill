@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, addDoc, onSnapshot, updateDoc, doc, increment } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, updateDoc, doc } from 'firebase/firestore';
 import { defaultDb, auth } from '../firebase/config';
-import LogoutButton from '../user/page';// Import the LogoutButton component
+import LogoutButton from './LogoutButton'; // Import the LogoutButton component
 
 export default function Skills() {
   const [skills, setSkills] = useState([]);
@@ -74,7 +74,7 @@ export default function Skills() {
       setIsLoading(true);
       const skillRef = doc(defaultDb, 'skills', skillId);
       await updateDoc(skillRef, {
-        score: increment(10)
+        score: firebase.firestore.FieldValue.increment(1)  // Increase the score by 1
       });
       fetchSkills(user.uid);
     } catch (error) {
@@ -123,17 +123,11 @@ export default function Skills() {
                       Score: {skill.score}
                     </span>
                   </div>
-                  <div className="flex">
-                    <div className="relative flex-grow">
-                      <div
-                        className="h-2 bg-green-400 rounded-lg"
-                        style={{ width: `${Math.min(skill.score * 10, 100)}%` }}  // Adjust score scaling to a percentage width
-                      />
-                      <div
-                        className="absolute top-0 left-0 h-2 bg-gray-200 rounded-lg"
-                        style={{ width: '100%' }}  // Background for the bar
-                      />
-                    </div>
+                  <div className="relative h-2 bg-gray-200 rounded-lg">
+                    <div
+                      className="h-2 bg-green-400 rounded-lg"
+                      style={{ width: `${Math.min(skill.score * 10, 100)}%`, transition: 'width 0.5s ease-in-out' }}  // Adjust score scaling to a percentage width with animation
+                    />
                   </div>
                 </div>
               </div>
