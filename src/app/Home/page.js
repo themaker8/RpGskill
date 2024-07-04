@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, addDoc, onSnapshot, updateDoc, doc, increment} from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, updateDoc, doc, increment, FieldValue} from 'firebase/firestore';
 import { defaultDb, auth } from '../firebase/config';
-import LogoutButton from '../user/page';
+import LogoutButton from '../user/page'; // Correct import path for LogoutButton
 
 export default function Skills() {
   const [skills, setSkills] = useState([]);
@@ -126,7 +126,7 @@ export default function Skills() {
                   <div className="relative h-2 bg-gray-200 rounded-lg">
                     <div
                       className="h-2 bg-green-400 rounded-lg"
-                      style={{ width: `${Math.min(skill.score * 10, 100)}%`, transition: 'width 0.5s ease-in-out' }}  // Adjust score scaling to a percentage width with animation
+                      style={{ width: `${Math.min(skill.score, 100)}%`, transition: 'width 0.5s ease-in-out' }}  // Adjust score scaling to a percentage width with animation
                     />
                   </div>
                 </div>
