@@ -64,8 +64,7 @@ export default function Skills() {
           <br></br>
         </h1>
         <br></br>
-        {isLoading && <p className="text-center">Loading...</p>}
-        
+  
         <div>
           <h3 className="text-xl font-semibold mb-2">Your Skills</h3>
           <br></br>
