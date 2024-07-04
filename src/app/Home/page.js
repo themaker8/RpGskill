@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { collection, addDoc, onSnapshot, updateDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, onSnapshot, updateDoc, doc, increment} from 'firebase/firestore';
 import { defaultDb, auth } from '../firebase/config';
 import LogoutButton from '../user/page';
 
@@ -74,7 +74,7 @@ export default function Skills() {
       setIsLoading(true);
       const skillRef = doc(defaultDb, 'skills', skillId);
       await updateDoc(skillRef, {
-        score: firebase.firestore.FieldValue.increment(1)  // Increase the score by 1
+        score: increment(10)  // Increase the score by 1
       });
       fetchSkills(user.uid);
     } catch (error) {
