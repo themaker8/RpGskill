@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <nav className="fixed bottom-0 inset-x-0 bg-gray-900 text-white p-2 z-10">
       <div className="max-w-3xl mx-auto flex justify-around">
-        <Link href="/" className="text-lg font-semibold hover:text-gray-400">
+        <Link href="/Home" className="text-lg font-semibold hover:text-gray-400">
           Home
         </Link>
         <Link href="/profile" className="text-lg font-semibold hover:text-gray-400">
