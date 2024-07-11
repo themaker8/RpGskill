@@ -1,7 +1,7 @@
-'use client';
+'use client'
 
 import { useState, useEffect } from 'react';
-import { collection, addDoc, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, deleteDoc, getDocs } from 'firebase/firestore';
 import { defaultDb, auth } from '../firebase/config';
 import Navbar from '../navbar';
 import LogoutButton from '../user/page';
@@ -11,7 +11,6 @@ export default function AddSkill() {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState(null);
   const [skills, setSkills] = useState([]);
-  const [selectedSkillId, setSelectedSkillId] = useState('');
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(currentUser => {
@@ -66,16 +65,10 @@ export default function AddSkill() {
     }
   };
 
-  const deleteSkill = async () => {
-    if (!selectedSkillId) {
-      console.error('No skill selected for deletion');
-      return;
-    }
-
+  const deleteSkill = async (skillId) => {
     try {
       setIsLoading(true);
-      await deleteDoc(doc(defaultDb, 'skills', selectedSkillId));
-      setSelectedSkillId('');
+      await deleteDoc(doc(defaultDb, 'skills', skillId));
       fetchSkills(user.uid);
     } catch (error) {
       console.error('Error deleting skill:', error);
@@ -109,36 +102,20 @@ export default function AddSkill() {
             {skills.map((skill) => (
               <div
                 key={skill.id}
-                className={`flex items-center justify-between p-2 border border-gray-200 rounded-lg bg-gray-100 transition-transform duration-300 ease-in-out ${selectedSkillId === skill.id ? 'bg-blue-100 transform scale-105' : ''}`}
-                onClick={() => setSelectedSkillId(skill.id === selectedSkillId ? '' : skill.id)}
+                className="flex items-center justify-between p-2 border border-gray-200 rounded-lg bg-gray-100 transition-transform duration-300 ease-in-out hover:bg-gray-200"
               >
                 <span>{skill.name}</span>
-                {selectedSkillId === skill.id && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedSkillId(skill.id);
-                    }}
-                    className="bg-red-500 text-white py-1 px-2 rounded-lg hover:bg-red-600"
-                  >
-                    Select for Deletion
-                  </button>
-                )}
+                <button
+                  onClick={() => deleteSkill(skill.id)}
+                  className="bg-red-500 text-white py-1 px-2 rounded-lg hover:bg-red-600"
+                >
+                  Delete
+                </button>
               </div>
             ))}
           </div>
         </div>
 
-        <div>
-          <h2 className="text-lg font-semibold mb-2 text-center">Delete Skill</h2>
-          <button
-            onClick={deleteSkill}
-            className="bg-red-500 text-white py-2 px-4 m-2 rounded-lg w-full md:w-3/4 mx-auto"
-            disabled={!selectedSkillId || isLoading}
-          >
-            Delete
-          </button>
-        </div>
         {isLoading && <p className="text-center">Loading...</p>}
       </div>
       <div className="text-center mb-4">
