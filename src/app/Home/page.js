@@ -81,6 +81,10 @@ export default function Skills() {
     }
   };
 
+  const calculateLevel = (score) => {
+    return Math.floor(score / 20000) + 1;
+  };
+
   const getLevelProgressPercentage = (score) => {
     return (score % 20000) / 20000 * 100;
   };
@@ -118,7 +122,7 @@ export default function Skills() {
           <div className="relative w-full bg-gray-700 p-2 rounded-lg">
             <div className="relative h-2 bg-gray-600 rounded-lg overflow-hidden">
               <div
-                className={`absolute h-2 rounded-lg ${getRandomSkillBarColor()}`}
+                className="absolute h-2 bg-blue-400 rounded-lg"
                 style={{ width: `${getLevelProgressPercentage(totalScore)}%`, transition: 'width 0.5s ease-in-out' }}
               />
             </div>
