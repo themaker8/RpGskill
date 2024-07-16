@@ -14,10 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-900 text-white`}>
-        <div className="min-h-screen flex flex-col bg-rpg-background">
-          <header className="p-4 flex justify-between items-center">
-            <Navbar />
-          </header>
+  
           <main className="flex-grow">
             {children}
           </main>
