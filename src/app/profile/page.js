@@ -6,8 +6,7 @@ import { useState, useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { defaultDb, auth } from '../firebase/config';
 import { useRouter } from 'next/router';
-import Navbar from '../Navbar
-
+import Navbar from '../Navbar';
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
