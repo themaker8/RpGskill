@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { defaultDb, auth } from '../firebase/config';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Navbar from '../navbar';
 export default function Profile() {
   const [user, setUser] = useState(null);
