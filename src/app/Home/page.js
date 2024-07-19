@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { collection, onSnapshot, updateDoc, doc, increment } from 'firebase/firestore';
+import { collection, onSnapshot, updateDoc, doc, increment, getDoc, deleteDoc } from 'firebase/firestore';
 import { defaultDb, auth } from '../firebase/config';
 import Navbar from '../navbar';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import CompletionCard from './completioncard'; // Import the CompletionCard component
 
 export default function Skills() {
   const [skills, setSkills] = useState([]);
@@ -13,6 +14,7 @@ export default function Skills() {
   const [user, setUser] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
   const [level, setLevel] = useState(1);
+  const [showCompletionCard, setShowCompletionCard] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,11 +26,12 @@ export default function Skills() {
       } else {
         setUser(null);
         console.error('User not authenticated');
+        router.push('/');
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   const handleLogout = async () => {
     try {
@@ -61,16 +64,31 @@ export default function Skills() {
   const fetchUserData = async (userId) => {
     try {
       const userDocRef = doc(defaultDb, 'users', userId);
-      const userDoc = await userDocRef.get();
-      if (userDoc.exists) {
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
         const userData = userDoc.data();
+        const userTotalScore = userData.totalScore || 0;
+        const levelHistory = userData.levelHistory || [];
+        const milestonesShown = userData.milestonesShown || [];
         setLevel(userData.level || 1);
-        setTotalScore(userData.totalScore || 0);
+        setTotalScore(userTotalScore);
+        
+        // Check if milestone has been reached and not shown before
+        if (userTotalScore >= 20000 && !milestonesShown.includes('20000')) {
+          setShowCompletionCard(true);
+          // Update milestonesShown field to include the newly achieved milestone
+          await updateDoc(userDocRef, {
+            milestonesShown: [...milestonesShown, '20000']
+          });
+        } else {
+          setShowCompletionCard(false);
+        }
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
   };
+  
 
   const increaseScore = async (skillId) => {
     try {
@@ -79,16 +97,54 @@ export default function Skills() {
       await updateDoc(skillRef, {
         score: increment(10)
       });
+  
+      const userRef = doc(defaultDb, 'users', user.uid);
+      const userDoc = await getDoc(userRef);
+      const userData = userDoc.data();
+      const oldTotalScore = userData.totalScore || 0;
+      const newTotalScore = oldTotalScore + 10;
+      const oldLevel = userData.level || 1;
+      const newLevel = calculateLevel(newTotalScore);
+  
+      // Update level history
+      const levelHistory = userData.levelHistory || [];
+      if (newLevel > oldLevel) {
+        levelHistory.push({
+          level: newLevel,
+          score: newTotalScore,
+          timestamp: new Date().toISOString()
+        });
+      }
+  
+      await updateDoc(userRef, {
+        totalScore: newTotalScore,
+        level: newLevel,
+        levelHistory: levelHistory
+      });
+  
+      fetchSkills(user.uid);
+      fetchUserData(user.uid);
+    } catch (error) {
+      console.error('Error increasing score:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const deleteSkill = async (skillId, skillScore) => {
+    try {
+      setIsLoading(true);
+      await deleteDoc(doc(defaultDb, 'skills', skillId));
 
       const userRef = doc(defaultDb, 'users', user.uid);
       await updateDoc(userRef, {
-        totalScore: increment(10)
+        totalScore: increment(-skillScore)
       });
 
       fetchSkills(user.uid);
       fetchUserData(user.uid);
     } catch (error) {
-      console.error('Error increasing score:', error);
+      console.error('Error deleting skill:', error);
     } finally {
       setIsLoading(false);
     }
@@ -117,12 +173,6 @@ export default function Skills() {
             </h1>
 
             <div className="mb-8 flex justify-center">
-              <button
-                onClick={handleLogout}
-                className="bg-red-500 text-white py-2 px-4 rounded-lg"
-              >
-                Logout
-              </button>
             </div>
 
             <div className="mb-8">
@@ -168,6 +218,7 @@ export default function Skills() {
                     >
                       +
                     </button>
+
                     <div className="w-1/2">
                       <div className={`relative h-2 rounded-lg ${getRandomSkillBarColor()}`}>
                         <div
@@ -181,6 +232,7 @@ export default function Skills() {
               </ul>
             </div>
           </div>
+          {showCompletionCard && <CompletionCard onClose={() => setShowCompletionCard(false)} />}
           <Navbar /> {/* Include the Navbar component */}
         </>
       ) : (

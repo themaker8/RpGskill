@@ -1,9 +1,10 @@
-'use client'
+'use client';
 import { useState, useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { defaultDb, auth } from '../firebase/config';
 import { useRouter } from 'next/navigation';
 import Navbar from '../navbar';
+
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [totalScore, setTotalScore] = useState(0);
@@ -17,7 +18,7 @@ export default function Profile() {
         fetchUserData(currentUser.uid);
       } else {
         setUser(null);
-        router.push('/login');
+        router.push('/');
       }
     });
 
@@ -27,11 +28,11 @@ export default function Profile() {
   const fetchUserData = async (userId) => {
     try {
       const userDocRef = doc(defaultDb, 'users', userId);
-      const userDoc = await getDoc(userDocRef);
+      const userDoc = await getDoc(userDocRef); // Corrected line
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        setTotalScore(userData.totalScore || 0);
         setLevel(userData.level || 1);
+        setTotalScore(userData.totalScore || 0);
       }
     } catch (error) {
       console.error('Error fetching user data:', error);

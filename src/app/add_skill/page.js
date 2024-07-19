@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { collection, addDoc, deleteDoc, getDocs } from 'firebase/firestore';
+import { collection, updateDoc, addDoc, increment, deleteDoc, getDocs, doc, getDoc } from 'firebase/firestore';
 import { defaultDb, auth } from '../firebase/config';
 import Navbar from '../navbar';
 import LogoutButton from '../user/page';
@@ -11,12 +11,15 @@ export default function AddSkill() {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState(null);
   const [skills, setSkills] = useState([]);
+  const [totalScore, setTotalScore] = useState(0);
+  const [level, setLevel] = useState(1);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(currentUser => {
       if (currentUser) {
         setUser(currentUser);
         fetchSkills(currentUser.uid);
+        fetchUserData(currentUser.uid); // Fetch user data on auth change
       } else {
         console.error('User not authenticated');
       }
@@ -65,11 +68,32 @@ export default function AddSkill() {
     }
   };
 
-  const deleteSkill = async (skillId) => {
+  const fetchUserData = async (userId) => {
+    try {
+      const userDocRef = doc(defaultDb, 'users', userId);
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setLevel(userData.level || 1);
+        setTotalScore(userData.totalScore || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const deleteSkill = async (skillId, skillScore) => {
     try {
       setIsLoading(true);
       await deleteDoc(doc(defaultDb, 'skills', skillId));
+      const userRef = doc(defaultDb, 'users', user.uid);
+      await updateDoc(userRef, {
+        totalScore: increment(- skillScore)
+      });
+      
       fetchSkills(user.uid);
+      fetchUserData(user.uid);
+
     } catch (error) {
       console.error('Error deleting skill:', error);
     } finally {
@@ -78,9 +102,9 @@ export default function AddSkill() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col pb-16">
+    <div className="min-h-screen flex flex-col pb-16 bg-gray-900 text-white">
       <div className="p-4 md:p-6 lg:p-8 max-w-3xl mx-auto flex-grow">
-        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 text-center">
+        <h1 className="flex justify-center text-xl md:text-2xl lg:text-3xl font-bold mb-2 text-center">
           Add New Skill
         </h1>
         <div className="mb-4">
@@ -89,9 +113,9 @@ export default function AddSkill() {
             value={newSkill}
             onChange={(e) => setNewSkill(e.target.value)}
             placeholder="Enter new skill"
-            className="border border-gray-300 p-2 rounded-lg mb-2 w-full md:w-3/4 mx-auto"
+            className="border border-gray-300 p-2 rounded-lg mb-2 w-full md:w-3/4 mx-auto text-black"
           />
-          <button onClick={addSkill} className="bg-black text-white py-2 px-4 m-2 rounded-lg">
+          <button onClick={addSkill} className="justify-center bg-black text-white py-2 px-4 m-2 rounded-lg">
             Add Skill
           </button>
         </div>
@@ -102,11 +126,11 @@ export default function AddSkill() {
             {skills.map((skill) => (
               <div
                 key={skill.id}
-                className="flex items-center justify-between p-2 border border-gray-200 rounded-lg bg-gray-100 transition-transform duration-300 ease-in-out hover:bg-gray-200"
+                className="text-black flex items-center justify-between p-2 border border-gray-200 rounded-lg bg-gray-100 transition-transform duration-300 ease-in-out hover:bg-gray-200"
               >
                 <span>{skill.name}</span>
                 <button
-                  onClick={() => deleteSkill(skill.id)}
+                  onClick={() => deleteSkill(skill.id, skill.score)}
                   className="bg-red-500 text-white py-1 px-2 rounded-lg hover:bg-red-600"
                 >
                   Delete
