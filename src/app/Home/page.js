@@ -88,7 +88,6 @@ export default function Skills() {
       console.error('Error fetching user data:', error);
     }
   };
-  
 
   const increaseScore = async (skillId) => {
     try {
@@ -227,11 +226,19 @@ export default function Skills() {
                         />
                       </div>
                     </div>
+
+                    <button 
+                      onClick={() => deleteSkill(skill.id, skill.score)}
+                      className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
+                    >
+                      Delete
+                    </button>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
+
           {showCompletionCard && <CompletionCard onClose={() => setShowCompletionCard(false)} />}
           <Navbar /> {/* Include the Navbar component */}
         </>

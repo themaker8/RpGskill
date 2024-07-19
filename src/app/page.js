@@ -1,24 +1,25 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { auth } from './firebase/config'; // Make sure the import path is correct
+import { auth, defaultDb } from './firebase/config';
 import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import LogoutButton from './user/page'; // Ensure the correct path
 import { useRouter } from 'next/navigation';
-import LogoutButton from './user/page';// Ensure the correct path to LogoutButton component
-
 export default function Home() {
-  const router = useRouter();
   const [user, setUser] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log('User is signed in:', user);
-        router.push('/Home'); // Redirect to the skills page if the user is logged in
-        setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        router.push('/Home'); // Redirect to the Home page
+
+        // Check and set user data in Firestore
+        await handleUserDocument(currentUser);
       } else {
-        console.log('No user signed in');
-        router.push('/');  // Redirect to the homepage or another route if the user is not logged in
+        router.push('/'); // Redirect to the homepage
       }
     });
 
@@ -28,9 +29,37 @@ export default function Home() {
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      // Handle user document creation or update
+      await handleUserDocument(user);
     } catch (error) {
       console.error('Error signing in with Google:', error);
+    }
+  };
+
+  const handleUserDocument = async (user) => {
+    const userDocRef = doc(defaultDb, 'users', user.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+      await setDoc(userDocRef, {
+        totalScore: 0,
+        level: 1,
+        levelHistory: [],
+        milestonesShown: [],
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      });
+    } else {
+      // Optionally update the document with new info if needed
+      await setDoc(userDocRef, {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      }, { merge: true });
     }
   };
 
