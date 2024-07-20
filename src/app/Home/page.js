@@ -226,13 +226,6 @@ export default function Skills() {
                         />
                       </div>
                     </div>
-
-                    <button 
-                      onClick={() => deleteSkill(skill.id, skill.score)}
-                      className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
                   </li>
                 ))}
               </ul>
