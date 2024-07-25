@@ -158,16 +158,16 @@ export default function Skills() {
   };
 
   const getRandomSkillBarColor = () => {
-    const colors = ['bg-green-400', 'bg-blue-400', 'bg-red-400', 'bg-yellow-400'];
+    const colors = ['bg-green-400', 'bg-blue-400', 'bg-yellow-400'];
     return colors[Math.floor(Math.random() * colors.length)];
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-900 text-white pb-16">
+    <div className="min-h-screen flex flex-col bg-[#fffbeb] text-black pb-16">
       {user ? (
         <>
           <div className="p-4 md:p-6 lg:p-8 max-w-3xl mx-auto flex-grow">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 text-center">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold font-body mb-6 text-center">
               Welcome, {user.displayName}
             </h1>
 
@@ -176,8 +176,8 @@ export default function Skills() {
 
             <div className="mb-8">
               <h2 className="text-lg font-semibold mb-2 text-center">Total Score</h2>
-              <div className="relative w-full bg-gray-700 p-4 rounded-lg">
-                <div className="relative h-6 bg-gray-600 rounded-lg overflow-hidden">
+              <div className="relative w-full bg-[#f87171] p-4 rounded-lg">
+                <div className="relative h-6 bg-black rounded-lg overflow-hidden">
                   <div
                     className="absolute h-6 bg-green-400 rounded-lg"
                     style={{ width: `${Math.min(totalScore, 20000) / 20000 * 100}%`, transition: 'width 0.5s ease-in-out' }}
@@ -192,8 +192,8 @@ export default function Skills() {
               <div className="text-center text-xl font-bold mb-4">
                 Level: {level}
               </div>
-              <div className="relative w-full bg-gray-700 p-2 rounded-lg">
-                <div className="relative h-2 bg-gray-600 rounded-lg overflow-hidden">
+              <div className="relative w-full bg-[#f87171]  p-2 rounded-lg">
+                <div className="relative h-2 bg-black rounded-lg overflow-hidden">
                   <div
                     className="absolute h-2 bg-blue-400 rounded-lg"
                     style={{ width: `${getLevelProgressPercentage(totalScore)}%`, transition: 'width 0.5s ease-in-out' }}
@@ -207,7 +207,7 @@ export default function Skills() {
               <h3 className="text-xl font-semibold mb-4 text-center">Your Skills</h3>
               <ul className="space-y-4">
                 {skills.map((skill) => (
-                  <li key={skill.id} className="flex items-center space-x-4 bg-gray-800 p-4 rounded-lg shadow-md">
+                  <li key={skill.id} className="flex items-center space-x-4 bg-[#f87171] p-4 rounded-lg shadow-md">
                     <div className="flex-1">
                       <span className="font-bold text-xl">{skill.name}</span>
                     </div>
@@ -237,7 +237,7 @@ export default function Skills() {
         </>
       ) : (
         <div className="flex justify-center items-center h-full">
-          <p className="text-xl">User not authenticated. Please log in.</p>
+          <p className="text-xl font-sans">User not authenticated. Please log in.</p>
         </div>
       )}
     </div>

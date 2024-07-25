@@ -102,7 +102,7 @@ export default function AddSkill() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col pb-16 bg-gray-900 text-white">
+    <div className="min-h-screen flex flex-col pb-16 bg-[#fffbeb] text-black">
       <div className="p-4 md:p-6 lg:p-8 max-w-3xl mx-auto flex-grow">
         <h1 className="flex justify-center text-xl md:text-2xl lg:text-3xl font-bold mb-2 text-center">
           Add New Skill
@@ -113,7 +113,7 @@ export default function AddSkill() {
             value={newSkill}
             onChange={(e) => setNewSkill(e.target.value)}
             placeholder="Enter new skill"
-            className="border border-gray-300 p-2 rounded-lg mb-2 w-full md:w-3/4 mx-auto text-black"
+            className="border border-gray-300 p-2 rounded-lg mb-2 w-full md:w-4/4 mx-auto text-black"
           />
           <button onClick={addSkill} className="justify-center bg-black text-white py-2 px-4 m-2 rounded-lg">
             Add Skill
