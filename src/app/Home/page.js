@@ -26,7 +26,7 @@ export default function Skills() {
       } else {
         setUser(null);
         console.error('User not authenticated');
-        router.push('/');
+        router.push('/Home');
       }
     });
 
