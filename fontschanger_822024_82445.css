@@ -1,0 +1,58 @@
+/* Fonts Changer (http://localhost:3000) */ 
+
+* {
+	font-family: "Asap" !important;
+}
+@font-face {
+	font-family: "Asap";
+	font-weight: 100;
+	src: url(https://fonts.gstatic.com/s/asap/v30/KFOOCniXp96a4Tc2DaTeuDAoKsE617JFc49knOIYdjTYkqQsK2OXoA7Glw.woff2) format("woff2");
+}
+
+@font-face {
+	font-family: "Asap";
+	font-weight: 200;
+	src: url(https://fonts.gstatic.com/s/asap/v30/KFOOCniXp96a4Tc2DaTeuDAoKsE617JFc49knOIYdjTYEqUsK2OXoA7Glw.woff2) format("woff2");
+}
+
+@font-face {
+	font-family: "Asap";
+	font-weight: 300;
+	src: url(https://fonts.gstatic.com/s/asap/v30/KFOOCniXp96a4Tc2DaTeuDAoKsE617JFc49knOIYdjTYzKUsK2OXoA7Glw.woff2) format("woff2");
+}
+
+@font-face {
+	font-family: "Asap";
+	font-weight: regular;
+	src: url(https://fonts.gstatic.com/s/asap/v30/KFOOCniXp96a4Tc2DaTeuDAoKsE617JFc49knOIYdjTYkqUsK2OXoA7Glw.woff2) format("woff2");
+}
+
+@font-face {
+	font-family: "Asap";
+	font-weight: 500;
+	src: url(https://fonts.gstatic.com/s/asap/v30/KFOOCniXp96a4Tc2DaTeuDAoKsE617JFc49knOIYdjTYoKUsK2OXoA7Glw.woff2) format("woff2");
+}
+
+@font-face {
+	font-family: "Asap";
+	font-weight: 600;
+	src: url(https://fonts.gstatic.com/s/asap/v30/KFOOCniXp96a4Tc2DaTeuDAoKsE617JFc49knOIYdjTYTKIsK2OXoA7Glw.woff2) format("woff2");
+}
+
+@font-face {
+	font-family: "Asap";
+	font-weight: 700;
+	src: url(https://fonts.gstatic.com/s/asap/v30/KFOOCniXp96a4Tc2DaTeuDAoKsE617JFc49knOIYdjTYdaIsK2OXoA7Glw.woff2) format("woff2");
+}
+
+@font-face {
+	font-family: "Asap";
+	font-weight: 800;
+	src: url(https://fonts.gstatic.com/s/asap/v30/KFOOCniXp96a4Tc2DaTeuDAoKsE617JFc49knOIYdjTYEqIsK2OXoA7Glw.woff2) format("woff2");
+}
+
+@font-face {
+	font-family: "Asap";
+	font-weight: 900;
+	src: url(https://fonts.gstatic.com/s/asap/v30/KFOOCniXp96a4Tc2DaTeuDAoKsE617JFc49knOIYdjTYO6IsK2OXoA7Glw.woff2) format("woff2");
+}

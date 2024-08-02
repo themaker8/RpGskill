@@ -157,11 +157,6 @@ export default function Skills() {
     return (score % 20000) / 20000 * 100;
   };
 
-  const getRandomSkillBarColor = () => {
-    const colors = ['bg-green-400', 'bg-blue-400', 'bg-yellow-400'];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-[#fffbeb] text-black pb-16">
       {user ? (
@@ -207,25 +202,22 @@ export default function Skills() {
               <h3 className="text-xl font-semibold mb-4 text-center">Your Skills</h3>
               <ul className="space-y-4">
                 {skills.map((skill) => (
-                  <li key={skill.id} className="flex items-center space-x-4 bg-[#f87171] p-4 rounded-lg shadow-md">
-                    <div className="flex-1">
-                      <span className="font-bold text-xl">{skill.name}</span>
-                    </div>
-                    <button 
-                      onClick={() => increaseScore(skill.id)}
-                      className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600"
-                    >
-                      +
-                    </button>
-
-                    <div className="w-1/2">
-                      <div className={`relative h-2 rounded-lg ${getRandomSkillBarColor()}`}>
+                  <li key={skill.id} className="flex items-center justify-between bg-[#f87171] p-4 rounded-lg shadow-md">
+                    <div className="flex items-center w-full space-x-4">
+                      <span className="font-bold text-xl w-1/4">{skill.name}</span>
+                      <div className="relative h-2 flex-1 bg-gray-300 rounded-lg overflow-hidden">
                         <div
-                          className={`absolute h-2 rounded-lg ${getRandomSkillBarColor()}`}
+                          className="absoulute h-2 bg-green-400 rounded-lg"
                           style={{ width: `${Math.min(skill.score, 100)}%`, transition: 'width 0.5s ease-in-out' }}
                         />
                       </div>
                     </div>
+                    <button 
+                      onClick={() => increaseScore(skill.id)}
+                      className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 ml-4"
+                    >
+                      +
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -240,6 +232,7 @@ export default function Skills() {
           <p className="text-xl font-sans">User not authenticated. Please log in.</p>
         </div>
       )}
+   
     </div>
   );
 }

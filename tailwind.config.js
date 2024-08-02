@@ -13,7 +13,7 @@ module.exports = {
         'dark-text': '#000000',   // Define the color for dark mode text
       },
       fontFamily: {
-        body: ['Barlow'] // Define global font families
+        body: ['Asap'] // Define global font families
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
