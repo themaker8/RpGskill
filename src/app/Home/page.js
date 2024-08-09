@@ -72,7 +72,7 @@ export default function Skills() {
         const milestonesShown = userData.milestonesShown || [];
         setLevel(userData.level || 1);
         setTotalScore(userTotalScore);
-        
+
         // Check if milestone has been reached and not shown before
         if (userTotalScore >= 20000 && !milestonesShown.includes('20000')) {
           setShowCompletionCard(true);
@@ -96,7 +96,7 @@ export default function Skills() {
       await updateDoc(skillRef, {
         score: increment(10)
       });
-  
+
       const userRef = doc(defaultDb, 'users', user.uid);
       const userDoc = await getDoc(userRef);
       const userData = userDoc.data();
@@ -104,7 +104,7 @@ export default function Skills() {
       const newTotalScore = oldTotalScore + 10;
       const oldLevel = userData.level || 1;
       const newLevel = calculateLevel(newTotalScore);
-  
+
       // Update level history
       const levelHistory = userData.levelHistory || [];
       if (newLevel > oldLevel) {
@@ -114,13 +114,13 @@ export default function Skills() {
           timestamp: new Date().toISOString()
         });
       }
-  
+
       await updateDoc(userRef, {
         totalScore: newTotalScore,
         level: newLevel,
         levelHistory: levelHistory
       });
-  
+
       fetchSkills(user.uid);
       fetchUserData(user.uid);
     } catch (error) {
@@ -171,7 +171,7 @@ export default function Skills() {
 
             <div className="mb-8">
               <h2 className="text-lg font-semibold mb-2 text-center">Total Score</h2>
-              <div className="relative w-full bg-[#f87171] p-4 rounded-lg">
+              <div className="relative w-full bg-[#FF4655] p-4 rounded-lg">
                 <div className="relative h-6 bg-black rounded-lg overflow-hidden">
                   <div
                     className="absolute h-6 bg-green-400 rounded-lg"
@@ -187,7 +187,7 @@ export default function Skills() {
               <div className="text-center text-xl font-bold mb-4">
                 Level: {level}
               </div>
-              <div className="relative w-full bg-[#f87171]  p-2 rounded-lg">
+              <div className="relative w-full bg-[#FF4655]  p-2 rounded-lg">
                 <div className="relative h-2 bg-black rounded-lg overflow-hidden">
                   <div
                     className="absolute h-2 bg-blue-400 rounded-lg"
@@ -202,19 +202,24 @@ export default function Skills() {
               <h3 className="text-xl font-semibold mb-4 text-center">Your Skills</h3>
               <ul className="space-y-4">
                 {skills.map((skill) => (
-                  <li key={skill.id} className="flex items-center justify-between bg-[#f87171] p-4 rounded-lg shadow-md">
-                    <div className="flex items-center w-full space-x-4">
-                      <span className="font-bold text-xl w-1/4">{skill.name}</span>
-                      <div className="relative h-2 flex-1 bg-gray-300 rounded-lg overflow-hidden">
+                  <li
+                    key={skill.id}
+                    className="flex flex-col items-start bg-[#FF4655] p-4 rounded-lg shadow-md space-y-2"
+                  >
+                    <div className="w-full">
+                      <span className="font-bold text-xl break-words">{skill.name}</span>
+                    </div>
+                    <div className="relative w-full">
+                      <div className="relative h-2 bg-gray-300 rounded-lg overflow-hidden">
                         <div
-                          className="absoulute h-2 bg-green-400 rounded-lg"
+                          className="absolute h-2 bg-green-400 rounded-lg"
                           style={{ width: `${Math.min(skill.score, 100)}%`, transition: 'width 0.5s ease-in-out' }}
                         />
                       </div>
                     </div>
-                    <button 
+                    <button
                       onClick={() => increaseScore(skill.id)}
-                      className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 ml-4"
+                      className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600"
                     >
                       +
                     </button>
@@ -232,7 +237,7 @@ export default function Skills() {
           <p className="text-xl font-sans">User not authenticated. Please log in.</p>
         </div>
       )}
-   
+
     </div>
   );
 }
