@@ -6,7 +6,7 @@ import { defaultDb, auth } from '../firebase/config';
 import Navbar from '../navbar';
 import { signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import CompletionCard from './completioncard'; // Import the CompletionCard component
+import CompletionCard from './completioncard';
 
 export default function Skills() {
   const [skills, setSkills] = useState([]);
@@ -49,8 +49,10 @@ export default function Skills() {
       const unsubscribe = onSnapshot(skillsCollectionRef, (snapshot) => {
         const skillsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const userSkills = skillsData.filter(skill => skill.userId === userId);
+        const calculatedTotalScore = userSkills.reduce((total, skill) => total + (skill.score || 0), 0); // Correct calculation
         setSkills(userSkills);
-        setTotalScore(userSkills.reduce((total, skill) => total + skill.score, 0));  // Calculate total score
+        setTotalScore(calculatedTotalScore); // Set the correctly calculated total score
+        setLevel(calculateLevel(calculatedTotalScore)); // Update level based on total score
         setIsLoading(false);
       });
 
@@ -68,7 +70,6 @@ export default function Skills() {
       if (userDoc.exists()) {
         const userData = userDoc.data();
         const userTotalScore = userData.totalScore || 0;
-        const levelHistory = userData.levelHistory || [];
         const milestonesShown = userData.milestonesShown || [];
         setLevel(userData.level || 1);
         setTotalScore(userTotalScore);
@@ -204,25 +205,30 @@ export default function Skills() {
                 {skills.map((skill) => (
                   <li
                     key={skill.id}
-                    className="flex flex-col items-start bg-[#FF4655] p-4 rounded-lg shadow-md space-y-2"
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-[#FF4655] p-4 rounded-lg shadow-md space-y-2 sm:space-y-0"
                   >
-                    <div className="w-full">
-                      <span className="font-bold text-xl break-words">{skill.name}</span>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center w-full">
+                      <div className="flex-grow">
+                        <span className="font-bold text-lg sm:text-xl whitespace-normal break-words">
+                          {skill.name}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => increaseScore(skill.id)}
+                        className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 mt-2 sm:mt-0 sm:ml-4"
+                      >
+                        +
+                      </button>
                     </div>
-                    <div className="relative w-full">
+                    <div className="relative w-full sm:w-auto mt-2 sm:mt-0">
                       <div className="relative h-2 bg-gray-300 rounded-lg overflow-hidden">
                         <div
                           className="absolute h-2 bg-green-400 rounded-lg"
                           style={{ width: `${Math.min(skill.score, 100)}%`, transition: 'width 0.5s ease-in-out' }}
                         />
                       </div>
+                   
                     </div>
-                    <button
-                      onClick={() => increaseScore(skill.id)}
-                      className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600"
-                    >
-                      +
-                    </button>
                   </li>
                 ))}
               </ul>
@@ -237,7 +243,6 @@ export default function Skills() {
           <p className="text-xl font-sans">User not authenticated. Please log in.</p>
         </div>
       )}
-
     </div>
   );
 }
